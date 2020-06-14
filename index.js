@@ -11,7 +11,7 @@ res.send tells express we immideatly want to close this request and send that da
 */
 
 app.get('/', (req, res) => {
-  res.send({ hi: 'there' });
+  res.send({ hi: 'there!' });
 });
 
 //instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server
