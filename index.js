@@ -1,11 +1,9 @@
 //common js module
 const express = require('express');
-const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const keys = require('./config/keys');
+//we have nothing to return so we dont hold it in a variable
+require('./services/passport');
 //the express server
 const app = express();
-
 /*
 app.get is creating a brand new router handler with the get method
 "/" whenever you are in this route
@@ -16,25 +14,9 @@ res.send tells express we immideatly want to close this request and send that da
 // app.get('/', (req, res) => {
 //   res.send({ hi: 'there!' });
 // });
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: keys.googleClientID,
-      clientSecret: keys.googleClientSecret,
-      callbackURL: '/auth/google/callback',
-    },
-    (accessToken, refreshToken, profile, done) => {
-      console.log('wazaaaaaaa', profile);
-    }
-  )
-);
-app.get(
-  '/auth/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-  })
-);
-app.get('/auth/google/callback', passport.authenticate('google'));
+//the require is returning a function and we immediately invoke it with app as an argument
+require('./routes/authRoutes')(app);
+
 //instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
