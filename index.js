@@ -1,7 +1,12 @@
 //common js module
 const express = require('express');
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
 //we have nothing to return so we dont hold it in a variable
+require('./models/User');
 require('./services/passport');
+//connecting mongoose to our express
+mongoose.connect(keys.mongoURI);
 //the express server
 const app = express();
 /*
