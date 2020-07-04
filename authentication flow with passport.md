@@ -25,8 +25,8 @@ authentication flow:
   1.We install the dependencies that express can handle cookies
   2.We configure express to use cookies (index.js)
 
-  - we extract that cookie and assign it to req.session. One of the properties inside req.session is passport and inside the passport is the user.id which passport will take to serialize and deserialze
-    3.We tell passport to use cookies (index.js)
-    -so now passport will send the user.id to the cookie and serialize it (passport.js)
-    -when the user talks to our server again we will deserialize the cookie header, mongoose will find that specific user and passport will send it as res.user (see passport flow 5.)
-    -these are middlewares that will do some logic before going to the route handlers as res.user
+* we extract that cookie and assign it to req.session. One of the properties inside req.session is passport and inside the passport is the user.id which passport will take to serialize and deserialze
+  3.We tell passport to use cookies (index.js)
+  -so now passport will send the user.id to the cookie and serialize it (passport.js)
+  -when the user talks to our server again we will deserialize the cookie header, mongoose will find that specific user and passport will send it as res.user (see passport flow 5.)
+  -these are middlewares that will do some logic before going to the route handlers as res.user

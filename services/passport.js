@@ -26,6 +26,8 @@ passport.use(
       clientSecret: keys.googleClientSecret,
       //google will redirect the user to this url which we will fetch the token code from
       callbackURL: '/auth/google/callback',
+      //when we run in production our browser sends a request heroku passes it to a proxy then to the right heroku server. Our callback url in google is with https but Passport doesn't trust proxies so they type it as wwww. then that will give us an error because the callback is not the same as we described in our google api. proxy true says even if it goes to a proxy its okay.
+      proxy: true,
     },
 
     //the 2nd argument is the profile from the user we got fr0m google
