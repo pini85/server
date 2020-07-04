@@ -1,14 +1,31 @@
 //common js module
 const express = require('express');
 const mongoose = require('mongoose');
+
+//we installed a libary so express understands how to process cookies
+const cookieSession = require('cookie-session');
+const passport = require('passport');
 const keys = require('./config/keys');
-//we have nothing to return so we dont hold it in a variable
+//we have nothing to return so we don't hold it in a variable
 require('./models/User');
 require('./services/passport');
 //connecting mongoose to our express
 mongoose.connect(keys.mongoURI);
 //the express server
 const app = express();
+//we are configuring cookies n to express
+app.use(
+  cookieSession({
+    //how long should the cookie last? 30 days 30days*24hours*60minutes*60seconds*1000milliseconds
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    //we use a key to encrypt our cookie. By default whenever we send out the token in the cookie it will be encypted.
+    //provided an array because it will randomly select a different key if we had more than 1.
+    keys: [keys.cookieKey],
+  })
+);
+//we tell passport to use cookies
+app.use(passport.initialize());
+app.use(passport.session());
 /*
 app.get is creating a brand new router handler with the get method
 "/" whenever you are in this route
@@ -22,6 +39,6 @@ res.send tells express we immideatly want to close this request and send that da
 //the require is returning a function and we immediately invoke it with app as an argument
 require('./routes/authRoutes')(app);
 
-//instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server
+//instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server that we get from heroku as an envirment variable
 const PORT = process.env.PORT || 5000;
 app.listen(PORT);
