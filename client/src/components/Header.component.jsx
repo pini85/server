@@ -7,7 +7,7 @@ const Header = () => {
         <a className="left brand-logo">Emaily</a>
         <ul className="right">
           <li>
-            <a>Login With Google</a>
+            <a>Login With Google!</a>
           </li>
         </ul>
       </div>
