@@ -31,20 +31,17 @@ passport.use(
     },
 
     //the 2nd argument is the profile from the user we got fr0m google
-    (accessToken, refreshToken, profile, done) => {
+    async (accessToken, refreshToken, profile, done) => {
       //everytime we do a crud operation in our database it is asychnrounous
       //findOne is finding one record in our collection
-      User.findOne({ googleId: profile.id }).then((existingUser) => {
-        if (existingUser) {
-          //done tells passport that the authentication flow is finished. first argument is an error and 2nd is the user itself
-          done(null, existingUser);
-        } else {
-          //this creates a mongo model instance
-          new User({ googleId: profile.id }).save().then((user) => {
-            done(null, user);
-          });
-        }
-      });
+      const existingUser = await User.findOne({ googleId: profile.id });
+      if (existingUser) {
+        //done tells passport that the authentication flow is finished. first argument is an error and 2nd is the user itself
+        return done(null, existingUser);
+      }
+      //this creates a mongo model instance
+      const user = await new User({ googleId: profile.id }).save();
+      done(null, user);
     }
   )
 );
