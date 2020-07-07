@@ -20,8 +20,6 @@ module.exports = (app) => {
   //when a user goes to this route we will give the current user to the response.
   // remember we already have the cookie and passport pulls out the id from there and deserializes the id and mongoose created an model instance of it and passport adds to req object as req.user
   app.get('/api/current_user', (req, res) => {
-    console.log(req.user);
-
     res.send(req.user);
   });
 };
