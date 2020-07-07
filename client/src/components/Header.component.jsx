@@ -1,18 +1,43 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ auth }) => {
+  const renderContent = () => {
+    console.log(auth && auth._id);
+
+    switch (auth) {
+      case null:
+        return;
+      case false:
+        return (
+          <li>
+            <a href="/auth/google">Login In With Google</a>
+          </li>
+        );
+
+      default:
+        return (
+          <li>
+            <a href="/api/logout">Logout</a>
+          </li>
+        );
+    }
+  };
+  console.log(auth);
+
   return (
     <nav>
       <div className="nav-wrapper">
-        <a className="left brand-logo">Emaily</a>
-        <ul className="right">
-          <li>
-            <a>Login With Google!</a>
-          </li>
-        </ul>
+        <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
+          Emaily
+        </Link>
+        <ul className="right">{renderContent()}</ul>
       </div>
     </nav>
   );
 };
-
-export default Header;
+const mapStateToProps = ({ auth }) => {
+  return { auth };
+};
+export default connect(mapStateToProps)(Header);

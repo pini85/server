@@ -8,13 +8,20 @@ module.exports = (app) => {
     })
   );
   //passport is going to take the code that is in the end of the callback and send it back to google and then in return we get their profile from the 2nd argument of the passport config
-  app.get('/auth/google/callback', passport.authenticate('google'));
+  app.get(
+    '/auth/google/callback',
+    passport.authenticate('google'),
+    // after passport has authenticated us and we are logged in we pass the request to this callback function which will redirct us
+    (req, res) => {
+      res.redirect('/surveys');
+    }
+  );
 
   //we go to this url when we want to logout. Passport will then kill the cookie.
   app.get('/api/logout', (req, res) => {
     req.logout();
-    //we send back something to the user that we acknoledge than you signed out. This will be an empty page
-    res.send(req.user);
+    //we then redirect them to the root of our app
+    res.redirect('/');
   });
 
   //when a user goes to this route we will give the current user to the response.

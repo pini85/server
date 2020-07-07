@@ -2,12 +2,17 @@
 
   1.create a new passport strategy (passport.js)
   -inside we will define a url that google will give us the code token.
-  2.when they go to our specific route we will start the authentication process (authRoutes.js)
-  3.when google will redirect us to that url, google will give us the code and passport send it back to google to verify that indeed it is the same user (authRoutes.js)
+
+  2.when they go to our specific route we will start the authentication process (auth/google) (authRoutes.js)
+
+  3.when google will redirect us to that url, google will give us the code and passport send it back to google to verify that indeed it is the same user (auth/google/callback)(authRoutes.js)
   4.Google will then return us the user. We retrieve the user information from the 2nd argument in new passport strategy (passport.js)
+
   5.We configured to send a cookie to the browser. We wired up a route when the user goes to that url we will get the cookie from passport(authRoutes.js) (see cookie flow for more details)
 
-  6. We set up a route to logout (authRoutes.js)
+  6. When passport finishes its thing (we are logged in now),we take the request to the next argument and say redirect to /surveys (authRoutes.js)
+
+  7. We set up a route to logout (authRoutes.js)
 
 * MongoDb and Mongoose
 
