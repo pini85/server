@@ -7,6 +7,7 @@ import Header from './Header.component';
 import DashBoard from './DashBoard.component';
 import SurveyNew from './SurveyNew.component';
 import Landing from './Landing.component';
+import HelloWorld from './HelloWorld.component';
 class App extends Component {
   async componentDidMount() {
     this.props.fetchUser();
@@ -19,6 +20,7 @@ class App extends Component {
           <div>
             <Route exact path="/" component={Landing} />
             <Route exact path="/surveys" component={DashBoard} />
+            <Route exact path="/hello-world/" component={HelloWorld} />
             <Route path="/survey/new" component={SurveyNew} />
           </div>
         </BrowserRouter>
