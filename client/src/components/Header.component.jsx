@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 
 const Header = ({ auth }) => {
   const renderContent = () => {
-    console.log(auth && auth._id);
-
     switch (auth) {
       case null:
         return;
@@ -24,7 +22,6 @@ const Header = ({ auth }) => {
         );
     }
   };
-  console.log(auth);
 
   return (
     <nav>
