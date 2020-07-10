@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import StripeWrapper from './StripeWrapper.component';
 
-const Header = ({ auth }) => {
+const Header = (props) => {
   const renderContent = () => {
-    switch (auth) {
+    switch (props.auth) {
       case null:
         return;
       case false:
@@ -16,9 +17,15 @@ const Header = ({ auth }) => {
 
       default:
         return (
-          <li>
-            <a href="/api/logout">Logout</a>
-          </li>
+          <>
+            <li>
+              <a href="/api/logout">Logout</a>
+            </li>
+            <li>Credits:{props.auth.credits}</li>
+            <li>
+              <StripeWrapper />
+            </li>
+          </>
         );
     }
   };
@@ -26,7 +33,7 @@ const Header = ({ auth }) => {
   return (
     <nav>
       <div className="nav-wrapper">
-        <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
+        <Link to={props.auth ? '/surveys' : '/'} className="left brand-logo">
           Emaily
         </Link>
         <ul className="right">{renderContent()}</ul>
@@ -34,7 +41,7 @@ const Header = ({ auth }) => {
     </nav>
   );
 };
-const mapStateToProps = ({ auth }) => {
-  return { auth };
-};
-export default connect(mapStateToProps)(Header);
+const mapStateToProps = (state) => ({
+  auth: state.auth.users,
+});
+export default connect(mapStateToProps, null)(Header);

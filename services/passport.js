@@ -39,7 +39,7 @@ passport.use(
         //done tells passport that the authentication flow is finished. first argument is an error and 2nd is the user itself
         return done(null, existingUser);
       }
-      //this creates a mongo model instance
+      //this creates a mongo model instance and saves it in the mongo data base
       const user = await new User({ googleId: profile.id }).save();
       done(null, user);
     }

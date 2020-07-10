@@ -1,7 +1,7 @@
 //common js module
 const express = require('express');
 const mongoose = require('mongoose');
-
+const bodyParser = require('body-parser');
 //we installed a libary so express understands how to process cookies
 const cookieSession = require('cookie-session');
 const passport = require('passport');
@@ -13,6 +13,12 @@ require('./services/passport');
 mongoose.connect(keys.mongoURI);
 //the express server
 const app = express();
+
+//we use app.use when using middlewares for node these are all invoked when we get an incoming request before going to our route handlers
+
+//Parse incoming request bodies in a middleware before your handlers, available under the req.body property.(we use this to get the id from strip in billingRoutes.js)
+app.use(bodyParser.json());
+
 //we are configuring cookies n to express
 app.use(
   cookieSession({
@@ -38,6 +44,7 @@ res.send tells express we immideatly want to close this request and send that da
 // });
 //the require is returning a function and we immediately invoke it with app as an argument
 require('./routes/authRoutes')(app);
+require('./routes/billingRoutes')(app);
 
 //instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server that we get from heroku as an envirment variable
 const PORT = process.env.PORT || 5000;
