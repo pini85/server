@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import StripeWrapper from './StripeWrapper.component';
 
-const Header = (props) => {
+const Header = ({ auth }) => {
+  console.log(auth);
+
   const renderContent = () => {
-    switch (props.auth) {
+    switch (auth) {
       case null:
         return;
       case false:
@@ -21,7 +23,7 @@ const Header = (props) => {
             <li>
               <a href="/api/logout">Logout</a>
             </li>
-            <li>Credits:{props.auth.credits}</li>
+            <li>Credits:{auth.credits}</li>
             <li>
               <StripeWrapper />
             </li>
@@ -33,7 +35,7 @@ const Header = (props) => {
   return (
     <nav>
       <div className="nav-wrapper">
-        <Link to={props.auth ? '/surveys' : '/'} className="left brand-logo">
+        <Link to={auth ? '/surveys' : '/'} className="left brand-logo">
           Emaily
         </Link>
         <ul className="right">{renderContent()}</ul>
@@ -41,7 +43,7 @@ const Header = (props) => {
     </nav>
   );
 };
-const mapStateToProps = (state) => ({
-  auth: state.auth.users,
-});
+const mapStateToProps = ({ auth }) => {
+  return { auth };
+};
 export default connect(mapStateToProps, null)(Header);

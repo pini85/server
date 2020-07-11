@@ -16,6 +16,7 @@ module.exports = (app) => {
     req.user.credits += 5;
     //we need to save it in the mongo database
     const user = await req.user.save();
+
     //by convention we store the updated user to a variable. We could of used also req.user. But it could be since then the user has changed. So to be sure we get the latest.
     res.send(user);
   });

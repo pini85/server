@@ -45,6 +45,19 @@ res.send tells express we immideatly want to close this request and send that da
 //the require is returning a function and we immediately invoke it with app as an argument
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+//we get NODE_ENV from heroku
+if (process.env.NODE_ENV === 'production') {
+  //if the handlers above won't resolve the request it will go to the next route handler below
+
+  //Express will serve up production assests. Like our main.js or main.css
+  app.use(express.static('client/build'));
+  //if this handler cannot resolve it then go to the next one.
+
+  const path = require('path');
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  });
+}
 
 //instructs express to tell node that it wants to listen for imcoming traffic on port 5000 or production server that we get from heroku as an envirment variable
 const PORT = process.env.PORT || 5000;

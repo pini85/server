@@ -4,8 +4,6 @@ import * as actions from '../actions/index';
 import StripeCheckout from 'react-stripe-checkout';
 
 const StripeWrapper = (props) => {
-  console.log(props);
-
   return (
     <StripeCheckout
       name="Emaily"
