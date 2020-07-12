@@ -23,6 +23,7 @@
 
 authentication flow:
 
+\*Mongoose with authentication
 1.once we get the profile from google (2nd argument new passport strategy), we see if the user already exsists, if not save it to the database.(new User)
 
 2.When we returned the cookie, passport will deserialize it and mongoose will check for the user with the cookie.(findById)(passport.js)
@@ -55,8 +56,9 @@ authentication flow:
   So what we need to do is when there is a route that express doesn't know we want to give our index.html back to the client. So when we respond with that file. They will look inside the index.html. It sees it needs to load our bundle js file. It will again ask for express for it. But this time it is a very specific file (/client/build/static/js/main.js) Express doesn't know about this file. so we need to tell express to give that file.Then there is the logic of the react router.(index.js)
 
   Heroku flow:
-  We are not commiting to git our build. So we need to tell heroku to do it. The flow is like this:
-  Push to Heroku > Heroku installs server dep > Heroku runs "heroku-postbuild" > inside that script we tell heroku to install client dev > then tell heroku to run npm run build(package.json):
+
+We are not commiting to git our build. So we need to tell heroku to do it. The flow is like this:
+Push to Heroku > Heroku installs server dep > Heroku runs "heroku-postbuild" > inside that script we tell heroku to install client dev > then tell heroku to run npm run build(package.json):
 
 "heroku-postbuild"
 we tell heroku to do this before you run it in the server
@@ -69,3 +71,6 @@ we tell it to look at the client folder and install the dev dependencies
 
 && npm run build --prefix client
 we tell it to run npm build in the client folder
+
+- surveys flow
+  ffsdf

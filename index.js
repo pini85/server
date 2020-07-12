@@ -8,6 +8,7 @@ const passport = require('passport');
 const keys = require('./config/keys');
 //we have nothing to return so we don't hold it in a variable
 require('./models/User');
+require('./models/Survey');
 require('./services/passport');
 //connecting mongoose to our express
 mongoose.connect(keys.mongoURI);
@@ -45,6 +46,7 @@ res.send tells express we immideatly want to close this request and send that da
 //the require is returning a function and we immediately invoke it with app as an argument
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
 //we get NODE_ENV from heroku
 if (process.env.NODE_ENV === 'production') {
   //if the handlers above won't resolve the request it will go to the next route handler below
