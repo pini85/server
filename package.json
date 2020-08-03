@@ -30,6 +30,7 @@
     "redux-devtools-extension": "^2.13.8",
     "redux-thunk": "^2.3.0",
     "save": "^2.4.0",
+    "sendgrid": "^5.2.3",
     "strip": "^3.0.0",
     "stripe": "^8.69.0"
   }
