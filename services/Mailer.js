@@ -1,0 +1,40 @@
+const sendGrid = require('sendgrid');
+const helper = sendgrid.mail;
+const keys = require('../config/keys');
+
+class Mailer extends helper.Mail {
+  constructor({ subject, recipients }, content) {
+    this.from_email = new helper.Email('pinchas.hodadad@gmail.com');
+    this, (subject = subject);
+    this.body = new helper.Content('text/html', content);
+    this.recipients = this.formatAddresses(recipients);
+
+    //this is comes from sendGrid
+    this.addContent(this.body);
+    this.addClickTracking();
+    this.addRecipients();
+  }
+  formatAddresses(recipients) {
+    return recipients.map(({ email }) => {
+      return new helper.Email(email);
+    });
+  }
+  // this method from sendGrid will help us know what the user clicked on
+  addClickTracking() {
+    const trackingSettings = new helper.TrackingSettings();
+    const clickTracking = new helper.ClickTracking(true, true);
+
+    trackingSettings.setClickTracking(clickTracking);
+    this.addTrackingSettings(trackSettings);
+  }
+  addRecipients() {
+    const personalize = new helper.Personalization();
+
+    this.recipients.forEach((recipient) => {
+      personalize.addTo(recipient);
+    });
+    this.addPersonalization(personalize);
+  }
+}
+
+module.exports = Mailer;
