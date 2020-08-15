@@ -1,59 +1,60 @@
 import React, { Component } from 'react';
 import { reduxForm, Field } from 'redux-form';
 import SurveyField from './SurveyField.component';
+import { Link } from 'react-router-dom';
+import validateEmails from '../../utils/validateEmails.js';
 
 const FIELDS = [
   { label: 'Survey Title', name: 'title' },
   { label: 'Subject Line', name: 'subject' },
   { label: 'Email Body', name: 'body' },
-  { label: 'Recipient List', name: 'emails' },
+  { label: 'Recipient List', name: 'recipients' },
 ];
 class SurveyForm extends Component {
   renderFields() {
     return (
       <div>
-        <Field
-          label="Survey Title"
-          type="text"
-          name="surveyTitle"
-          component={SurveyField}
-        />
-        <Field
-          label="Subject Line"
-          type="text"
-          name="subject"
-          component={SurveyField}
-        />
-        <Field
-          label="Email Body"
-          type="text"
-          name="body"
-          component={SurveyField}
-        />
-        <Field
-          label="Recipient Lisy"
-          type="text"
-          name="emails"
-          component={SurveyField}
-        />
+        {FIELDS.map((field) => {
+          return (
+            <div key={field.label}>
+              <Field
+                label={field.label}
+                type="text"
+                name={field.name}
+                component={SurveyField}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   }
   render() {
     return (
       <div>
-        <form
-          onSubmit={this.props.handleSubmit((values) => console.log(values))}
-        >
+        <form onSubmit={this.props.handleSubmit(this.props.onSurveySubmit)}>
           {this.renderFields()}
-
-          <button type="submit">Submit</button>
+          <Link to="/surveys">Cancel</Link>
+          <button type="submit">Next</button>
         </form>
       </div>
     );
   }
 }
+const validate = (values) => {
+  const errors = {};
+  errors.recipients = validateEmails(values.recipients || '');
 
+  FIELDS.forEach(({ name }) => {
+    if (!values[name]) {
+      errors[name] = `You need to enter a ${name}`;
+    }
+  });
+
+  return errors;
+};
 export default reduxForm({
+  validate,
   form: 'surveyForm',
+  destroyOnUnmount: false,
 })(SurveyForm);
