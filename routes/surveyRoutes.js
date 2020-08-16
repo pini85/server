@@ -1,3 +1,6 @@
+const _ = require('lodash');
+const Path = require('path-parser');
+const { URL } = require('url');
 const mongoose = require('mongoose');
 const requireLogin = require('../middlewares/requireLogin');
 const requireCredits = require('../middlewares/requireCredits');
@@ -7,13 +10,45 @@ const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 const Survey = mongoose.model('surveys');
 
 module.exports = (app) => {
-  app.get('/api/surveys/thanks', (req, res) => {
+  app.get('/api/surveys/:surveyId/:option', (req, res) => {
     res.send('thanks for voting asshole!');
   });
 
   app.post('/api/surveys/webhooks', (req, res) => {
-    console.log('hello');
-    console.log(req.body);
+    const p = new Path('/api/surveys/:surveyId/:choice');
+    const events = _.map(req.body, (event) => {
+      const match = p.test(new URL(event.url).pathname);
+      if (match) {
+        return {
+          email: event.email,
+          surveyId: match.surveyId,
+          choice: match.choice,
+        };
+      }
+    });
+    const compactEvents = _.compact(events);
+    const uniqueEvents = _.uniqBy(compactEvents, 'email', 'surveyId');
+    uniqueEvents.forEach((event) => {
+      Survey.updateOne(
+        {
+          _id: event.surveyId,
+          recipients: {
+            //look inside the recipients and find a record that matches this cirteria.
+            $elemMatch: { email: event.email, responded: false },
+          },
+          //second argument is to update the Survey record
+        },
+        {
+          //$inc is to increment the choice value. The choice could be yes or no
+          $inc: { [event.choice]: 1 },
+          //$set means to set a property. $.responsded means the $ is getting the $elemMatch index and setting it to true
+          $set: { 'recipients.$.responded': true },
+          lastResponded: new Date(),
+        }
+        //.exec means to execute this query
+      ).exec();
+    });
+
     res.send({});
   });
 
