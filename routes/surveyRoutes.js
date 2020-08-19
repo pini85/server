@@ -10,6 +10,13 @@ const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
 const Survey = mongoose.model('surveys');
 
 module.exports = (app) => {
+  app.get('/api/surveys', requireLogin, async (req, res) => {
+    //we get all of the surveys but we exclude the recepients because it could be 10's of thousands.
+    const surveys = await Survey.find({ _user: req.user.id }).select({
+      recipients: false,
+    });
+    res.send(surveys);
+  });
   app.get('/api/surveys/:surveyId/:option', (req, res) => {
     res.send('thanks for voting asshole!');
   });
